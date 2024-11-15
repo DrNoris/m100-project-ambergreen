@@ -1,0 +1,12 @@
+Jurnal de activitate 
+sapt 4.11 - 10.11
+
+David Mitrea:
+Am dezvoltat diagrama aplicației si am folosit principile DDD si OOP pentru a imparti pe clase fiecare responsabilitate si tabelele pentru baza de date ce urmeaza a fi folosita. (DataManagement, AiPredictionModelManagement, RecomandationManagement, LoginManagement).
+
+Sasaran Noris:
+Am creat un fisier .OBJ cu harta 3D a orasului Cluj-Napoca ce va fi folosit pe partea de front-end a aplicatie. Am incercat randarea in aplicatie folosind renderul implicit din Kivy, am incercat randarea folosind PyOpenGl intr-o fereastra facuta de Kivy (momentan fara succes). 
+ 
+Macovei Bogdan:
+Am lucrat la structurarea conceptului aplicatiei si am analizat diverse principii de organizare pe clase, avand in vedere atat responsabilitatile fiecarei componente, cat si nevoile bazei de date. 
+
