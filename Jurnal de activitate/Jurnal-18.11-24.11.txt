@@ -1,0 +1,12 @@
+Jurnal de activitate 
+sapt 18.11 - 24.11
+
+
+
+David Mitrea
+Implementare pentru institution database table, shared infrastructure pentru a facilita crearea de repository uri si validatori noi si testare pentru domeniul institutionManagement unde se lucreaza cu institutii
+
+Sasaran Noris: Am facut ecranul de locare si am inceput sa fac ecranul aplicatiei principale. Am creat in Domain obiectele pe care le vom folosi. 
+
+
+
