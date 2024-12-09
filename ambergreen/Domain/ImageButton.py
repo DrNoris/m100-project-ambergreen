@@ -1,6 +1,5 @@
 from kivy.uix.button import Button
 from kivy.uix.image import Image
-from kivy.uix.boxlayout import BoxLayout
 
 
 class ImageButton(Button):

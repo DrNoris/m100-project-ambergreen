@@ -2,13 +2,11 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy_garden.mapview import MapView
-from Domain.Buildings import Building
-from Domain.CircularButton import CircularButton
-from Domain.CostumeMarker import CostumeMarker
-from Domain.CostumePopUp import *
+from ambergreen.Domain.Buildings import Building
+from ambergreen.Domain.CostumeMarker import CostumeMarker
+from ambergreen.Domain.CostumePopUp import *
 from abc import abstractmethod
-
-from Domain.ImageButton import ImageButton
+from ambergreen.Domain.ImageButton import ImageButton
 
 Builder.load_file("popup_design.kv")
 
@@ -113,7 +111,7 @@ class AccountAppScreen(AbstractAppScreen):
     def on_enter(self):
         super().on_enter()
 
-        self.account_button = ImageButton(image_source="Media/account-icon.png")
+        self.account_button = ImageButton(image_source="ambergreen/Media/account-icon.png")
         self.account_button.size = (self.width * 0.1, self.height * 0.1)
         self.account_button.pos_hint = {'x': 0.03, 'top': 0.95}
 
