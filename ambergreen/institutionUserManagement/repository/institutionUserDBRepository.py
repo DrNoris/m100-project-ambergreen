@@ -1,5 +1,5 @@
-from institutionUserManagement.entity.institutionUser import InstitutionUser
-from sharedInfrastructure.abstractPostgresRepository import AbstractPostgresRepository, E
+from ambergreen.institutionUserManagement.entity.institutionUser import InstitutionUser
+from ambergreen.sharedInfrastructure.abstractPostgresRepository import AbstractPostgresRepository
 
 
 class InstitutionUserDBRepository(AbstractPostgresRepository[InstitutionUser]):

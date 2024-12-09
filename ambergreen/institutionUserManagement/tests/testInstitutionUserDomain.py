@@ -1,5 +1,5 @@
 import unittest
-from institutionUserManagement.entity.institutionUser import InstitutionUser
+from ambergreen.institutionUserManagement.entity.institutionUser import InstitutionUser
 
 class TestInstitutionUser(unittest.TestCase):
     def setUp(self):

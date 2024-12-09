@@ -1,9 +1,9 @@
 from typing import Dict, List
-from sharedInfrastructure.abstractRepository import AbstractRepository
+from ambergreen.sharedInfrastructure.abstractRepository import AbstractRepository
 import unittest
-from institutionUserManagement.entity.institutionUser import InstitutionUser
-from institutionUserManagement.validator.institutionUserValidator import InstitutionUserValidator
-from institutionUserManagement.service.InstitutionUserService import InstitutionUserService
+from ambergreen.institutionUserManagement.entity.institutionUser import InstitutionUser
+from ambergreen.institutionUserManagement.validator.institutionUserValidator import InstitutionUserValidator
+from ambergreen.institutionUserManagement.service.InstitutionUserService import InstitutionUserService
 
 
 class InMemoryRepository(AbstractRepository[InstitutionUser]):

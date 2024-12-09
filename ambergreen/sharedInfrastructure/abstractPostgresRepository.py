@@ -1,12 +1,8 @@
 from abc import abstractmethod, ABC
-from cgitb import reset
 from typing import TypeVar, List
+from ambergreen.sharedInfrastructure.abstractRepository import AbstractRepository
 
 import psycopg2 #for PostgreSQL
-from dateutil.tz import gettz
-
-from sharedInfrastructure.abstractRepository import AbstractRepository
-from sharedInfrastructure.entity import Entity
 
 E = TypeVar("E")
 

@@ -1,5 +1,5 @@
 import unittest
-from consumptionDataManagement.entity.consumptionData import ConsumptionData
+from ambergreen.consumptionDataManagement.entity.consumptionData import ConsumptionData
 
 class TestConsumptionData(unittest.TestCase):
     def setUp(self):

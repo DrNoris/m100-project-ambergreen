@@ -1,7 +1,7 @@
 import unittest
 
-from institutionManagement.entity.institution import Institution
-from institutionManagement.validator.institutionValidator import InstitutionValidator
+from ambergreen.institutionManagement.entity.institution import Institution
+from ambergreen.institutionManagement.validator.institutionValidator import InstitutionValidator
 
 
 class TestValidator(unittest.TestCase):

@@ -1,10 +1,7 @@
 from typing import List
-
-from absl.flags import validator
-
-from institutionManagement.entity.institution import Institution
-from institutionManagement.validator.institutionValidator import InstitutionValidator
-from sharedInfrastructure.abstractRepository import AbstractRepository
+from ambergreen.institutionManagement.entity.institution import Institution
+from ambergreen.institutionManagement.validator.institutionValidator import InstitutionValidator
+from ambergreen.sharedInfrastructure.abstractRepository import AbstractRepository
 
 
 class InstitutionService:

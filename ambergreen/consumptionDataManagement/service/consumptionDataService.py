@@ -1,8 +1,8 @@
 from typing import List
 
-from consumptionDataManagement.entity.consumptionData import ConsumptionData
-from consumptionDataManagement.validator.consumptionDataValidator import ConsumptionDataValidator
-from sharedInfrastructure.abstractRepository import AbstractRepository
+from ambergreen.consumptionDataManagement.entity.consumptionData import ConsumptionData
+from ambergreen.consumptionDataManagement.validator.consumptionDataValidator import ConsumptionDataValidator
+from ambergreen.sharedInfrastructure.abstractRepository import AbstractRepository
 
 
 class ConsumptionDataService:

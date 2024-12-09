@@ -1,6 +1,6 @@
 from typing import Dict, List
-from consumptionDataManagement.entity.consumptionData import ConsumptionData
-from sharedInfrastructure.abstractRepository import AbstractRepository
+from ambergreen.consumptionDataManagement.entity.consumptionData import ConsumptionData
+from ambergreen.sharedInfrastructure.abstractRepository import AbstractRepository
 
 
 class InMemoryRepository(AbstractRepository[ConsumptionData]):

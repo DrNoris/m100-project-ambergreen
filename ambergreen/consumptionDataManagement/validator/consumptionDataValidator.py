@@ -1,8 +1,5 @@
-from sqlalchemy.sql.functions import localtime
-from tensorboard.compat.tensorflow_stub.dtypes import double
-
-from consumptionDataManagement.entity.consumptionData import ConsumptionData
-from sharedInfrastructure.validator import Validator
+from ambergreen.consumptionDataManagement.entity.consumptionData import ConsumptionData
+from ambergreen.sharedInfrastructure.validator import Validator
 
 
 class ConsumptionDataValidator(Validator):

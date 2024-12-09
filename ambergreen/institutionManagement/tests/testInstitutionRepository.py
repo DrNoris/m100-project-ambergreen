@@ -2,7 +2,7 @@ import unittest
 
 from psycopg2 import OperationalError
 
-from institutionManagement.repository.institutionDBRepository import InstitutionDBRepository
+from ambergreen.institutionManagement.repository.institutionDBRepository import InstitutionDBRepository
 
 
 class TestInstitutionRepository(unittest.TestCase):
@@ -10,7 +10,7 @@ class TestInstitutionRepository(unittest.TestCase):
         self.host = "localhost"
         self.database = "m100"
         self.user = "postgres"
-        self.password = "postgres"
+        self.password = "noris2580"
 
     def test_connection(self):
         try:

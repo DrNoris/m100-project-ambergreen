@@ -1,8 +1,8 @@
 from typing import List
 
-from institutionUserManagement.entity.institutionUser import InstitutionUser
-from institutionUserManagement.validator.institutionUserValidator import InstitutionUserValidator
-from sharedInfrastructure.abstractRepository import AbstractRepository
+from ambergreen.institutionUserManagement.entity.institutionUser import InstitutionUser
+from ambergreen.institutionUserManagement.validator.institutionUserValidator import InstitutionUserValidator
+from ambergreen.sharedInfrastructure.abstractRepository import AbstractRepository
 
 
 class InstitutionUserService:

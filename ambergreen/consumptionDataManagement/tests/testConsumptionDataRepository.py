@@ -2,7 +2,7 @@ import unittest
 
 from psycopg2 import OperationalError
 
-from consumptionDataManagement.repository.consumptionDataDBRepository import ConsumptionDataDBRepository
+from ambergreen.consumptionDataManagement.repository.consumptionDataDBRepository import ConsumptionDataDBRepository
 
 
 class TestConsumptionDataRepository(unittest.TestCase):

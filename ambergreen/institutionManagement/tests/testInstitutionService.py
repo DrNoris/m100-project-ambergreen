@@ -1,10 +1,9 @@
 from typing import Dict, List
-from sharedInfrastructure.abstractRepository import AbstractRepository
-from institutionManagement.entity.institution import Institution
+from ambergreen.sharedInfrastructure.abstractRepository import AbstractRepository
 import unittest
-from institutionManagement.entity.institution import Institution
-from institutionManagement.validator.institutionValidator import InstitutionValidator
-from institutionManagement.service.institutionService import InstitutionService
+from ambergreen.institutionManagement.entity.institution import Institution
+from ambergreen.institutionManagement.validator.institutionValidator import InstitutionValidator
+from ambergreen.institutionManagement.service.institutionService import InstitutionService
 
 class InMemoryRepository(AbstractRepository[Institution]):
     def __init__(self):

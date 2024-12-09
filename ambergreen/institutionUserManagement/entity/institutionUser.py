@@ -1,4 +1,4 @@
-from sharedInfrastructure.entity import Entity
+from ambergreen.sharedInfrastructure.entity import Entity
 
 
 class InstitutionUser(Entity):

@@ -1,8 +1,5 @@
-from tensorboard.compat.tensorflow_stub.tensor_shape import vector
-
-from consumptionDataManagement.entity.consumptionData import ConsumptionData
-from sharedInfrastructure.abstractPostgresRepository import AbstractPostgresRepository
-from sharedInfrastructure.abstractRepository import E
+from ambergreen.consumptionDataManagement.entity.consumptionData import ConsumptionData
+from ambergreen.sharedInfrastructure.abstractPostgresRepository import AbstractPostgresRepository
 
 
 class ConsumptionDataDBRepository(AbstractPostgresRepository[ConsumptionData]):

@@ -1,4 +1,4 @@
-from sharedInfrastructure.abstractRepository import AbstractRepository
+from ambergreen.sharedInfrastructure.abstractRepository import AbstractRepository
 
 
 class InMemoryRepository(AbstractRepository):

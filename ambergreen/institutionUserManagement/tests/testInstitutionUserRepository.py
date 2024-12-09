@@ -2,7 +2,7 @@ import unittest
 
 from psycopg2 import OperationalError
 
-from institutionUserManagement.repository.institutionUserDBRepository import InstitutionUserDBRepository
+from ambergreen.institutionUserManagement.repository.institutionUserDBRepository import InstitutionUserDBRepository
 
 
 class TestInstitutionRepository(unittest.TestCase):

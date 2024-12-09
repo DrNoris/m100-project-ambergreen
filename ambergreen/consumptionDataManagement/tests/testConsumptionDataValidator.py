@@ -1,6 +1,6 @@
 import unittest
-from consumptionDataManagement.validator.consumptionDataValidator import ConsumptionDataValidator
-from consumptionDataManagement.entity.consumptionData import ConsumptionData
+from ambergreen.consumptionDataManagement.validator.consumptionDataValidator import ConsumptionDataValidator
+from ambergreen.consumptionDataManagement.entity.consumptionData import ConsumptionData
 
 
 class TestConsumptionDataValidator(unittest.TestCase):

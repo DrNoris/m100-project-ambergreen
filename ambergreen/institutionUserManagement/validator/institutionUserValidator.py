@@ -1,5 +1,5 @@
-from institutionUserManagement.entity.institutionUser import InstitutionUser
-from sharedInfrastructure.validator import Validator
+from ambergreen.institutionUserManagement.entity.institutionUser import InstitutionUser
+from ambergreen.sharedInfrastructure.validator import Validator
 
 
 class InstitutionUserValidator(Validator):

@@ -1,6 +1,6 @@
 import unittest
-from institutionUserManagement.validator.institutionUserValidator import InstitutionUserValidator
-from institutionUserManagement.entity.institutionUser import InstitutionUser
+from ambergreen.institutionUserManagement.validator.institutionUserValidator import InstitutionUserValidator
+from ambergreen.institutionUserManagement.entity.institutionUser import InstitutionUser
 
 class TestInstitutionUserValidator(unittest.TestCase):
     def setUp(self):
