@@ -1,2 +1,5 @@
 Mitrea David
 Am terminat de implementat RecomandationService unde un llm local structureaza recomandarile 
+
+Sasaran Noris
+Am terminat UI-ul ce se poate realiza fara nici un fel de date din service. Primul push de cod pe care l-am facut este acum
