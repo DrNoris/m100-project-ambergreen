@@ -1,0 +1,528 @@
+<CostumePopUpAccount>:
+    size_hint: 0.6, 0.7
+    title: ""  # Make sure the title of the popup is empty
+    title_size: root.width * 0.04
+    title_align: 'center'
+    separator_color: 0.1, 0.2, 0.3, 0
+    background_color: 0.1, 0.2, 0.3, 0.5
+
+    FloatLayout:
+        # Location Label
+        Label:
+            id: location
+            text: ""
+            font_name: "Roboto-Bold"
+            font_size: root.width * 0.02
+            halign: 'center'
+            valign: 'middle'
+            bold: True
+            size_hint: None, None
+            width: root.width * 0.6
+            pos_hint: {"center_x": 0.5, "top": 1.05}  # Position below the title
+            color: 1, 1, 1, 1
+
+        # BoxLayout for numbers
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: None, None
+            height: root.height * 0.7  # Sufficient height for children and spacing
+            width: root.width * 0.6
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            spacing: root.height * 0.1  # Add spacing between rows
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: None, None
+                height: root.height * 0.1  # Adjust per row height
+                width: root.width * 0.8
+                spacing: root.width * 0.1
+
+                Image:
+                    id: gasIcon
+                    source: "Media/gas-icon.png"  # Replace with your icon source
+                    size_hint: None, None
+                    size: self.height, self.height
+
+                # First Number
+                Label:
+                    id: gasNumber
+                    text: "Number 1"
+                    font_name: "Roboto"
+                    font_size: root.width * 0.03
+                    halign: 'center'
+                    valign: 'middle'
+                    color: 1, 1, 1, 1
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: None, None
+                height: root.height * 0.1  # Adjust per row height
+                width: root.width * 0.8
+                spacing: root.width * 0.1
+
+                Image:
+                    id: waterIcon
+                    source: "Media/water-icon.png"  # Replace with your icon source
+                    size_hint: None, None
+                    size: self.height, self.height
+
+                # Second Number
+                Label:
+                    id: waterNumber
+                    text: "Number 2"
+                    font_name: "Roboto"
+                    font_size: root.width * 0.03
+                    halign: 'center'
+                    valign: 'middle'
+                    color: 1, 1, 1, 1
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: None, None
+                height: root.height * 0.1  # Adjust per row height
+                width: root.width * 0.8
+                spacing: root.width * 0.1
+
+                Image:
+                    id: electricityIcon
+                    source: "Media/electricity-icon.png"  # Replace with your icon source
+                    size_hint: None, None
+                    size: self.height, self.height
+
+                # Third Number
+                Label:
+                    id: electricityNumber
+                    text: "Number 3"
+                    font_name: "Roboto"
+                    font_size: root.width * 0.03
+                    halign: 'center'
+                    valign: 'middle'
+                    color: 1, 1, 1, 1
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, None
+                height: root.height * 0.1
+                pos_hint: {"center_x": 0.5}
+                padding: [root.width * 0.05, 0]
+                spacing: root.width * 0.02
+
+                Image:
+                    id: CO2Icon
+                    source: "Media/CO2-icon.png"  # Replace with your icon source
+                    size_hint: None, None
+                    size: self.height, self.height
+
+                Label:
+                    id: CO2Number
+                    text: "Number 1"
+                    font_name: "Roboto"
+                    font_size: root.width * 0.03
+                    halign: 'center'
+                    valign: 'middle'
+                    color: 1, 1, 1, 1
+
+                Image:
+                    id: treeIcon
+                    source: "Media/tree-icon.png"  # Replace with your icon source
+                    size_hint: None, None
+                    size: self.height, self.height
+
+                Label:
+                    id: treeNumber
+                    text: "Number 2"
+                    font_name: "Roboto"
+                    font_size: root.width * 0.03
+                    halign: 'center'
+                    valign: 'middle'
+                    color: 1, 1, 1, 1
+
+
+<CostumePopUpGuest>:
+    size_hint: 0.6, 0.35
+    title: ""  # Make sure the title of the popup is empty
+    title_size: root.width * 0.04
+    title_align: 'center'
+    separator_color: 0.1, 0.2, 0.3, 0
+    background_color: 0.1, 0.2, 0.3, 0.5
+
+    FloatLayout:
+        # Location Label
+        Label:
+            id: location
+            text: ""
+            font_name: "Roboto-Bold"
+            font_size: root.width * 0.02
+            halign: 'center'
+            valign: 'middle'
+            bold: True
+            size_hint: None, None
+            width: root.width * 0.6
+            pos_hint: {"center_x": 0.5, "top": 1.05}  # Position below the title
+            color: 1, 1, 1, 1
+
+        # BoxLayout for numbers
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: None, None
+            height: root.height * 0.1  # Sufficient height for children and spacing
+            width: root.width * 0.6
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, None
+                height: root.height * 0.1
+                pos_hint: {"center_x": 0.5}
+                padding: [root.width * 0.05, 0]
+                spacing: root.width * 0.02
+
+                Image:
+                    id: CO2Icon
+                    source: "Media/CO2-icon.png"  # Replace with your icon source
+                    size_hint: None, None
+                    size: self.height, self.height
+
+                Label:
+                    id: CO2Number
+                    text: "Number 1"
+                    font_name: "Roboto"
+                    font_size: root.width * 0.03
+                    halign: 'center'
+                    valign: 'middle'
+                    color: 1, 1, 1, 1
+
+                Image:
+                    id: treeIcon
+                    source: "Media/tree-icon.png"  # Replace with your icon source
+                    size_hint: None, None
+                    size: self.height, self.height
+
+                Label:
+                    id: treeNumber
+                    text: "Number 2"
+                    font_name: "Roboto"
+                    font_size: root.width * 0.03
+                    halign: 'center'
+                    valign: 'middle'
+                    color: 1, 1, 1, 1
+
+
+<CostumePopUpAccountMenu>:
+    size_hint: 0.6, 0.7
+    title: ""  # Make sure the title of the popup is empty
+    title_size: root.width * 0.04
+    title_align: 'center'
+    separator_color: 0.1, 0.2, 0.3, 0
+    background_color: 0.1, 0.2, 0.3, 0.5
+
+    FloatLayout:
+        # Title Label at the top (Center aligned)
+        Label:
+            id: title_label
+            text: ""
+            font_name: "Roboto-Bold"
+            font_size: root.width * 0.04
+            halign: 'center'
+            valign: 'middle'
+            bold: True
+            size_hint: None, None
+            width: root.width * 0.6
+            pos_hint: {"center_x": 0.5, "top": 1.0}  # Position it at the top center
+            color: 1, 1, 1, 1
+
+        # Vertical BoxLayout for three green buttons
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: None, None
+            height: root.height * 0.4  # Adjust height as needed
+            width: root.width * 0.6
+            pos_hint: {"center_x": 0.5, "center_y": 0.6}  # Positioned in the center
+            spacing: root.height * 0.05  # Space between buttons
+
+            Button:
+                text: "Calculator"
+                background_color: 0, 1, 0, 1  # Green color
+                size_hint: None, None
+                height: root.height * 0.1
+                width: root.width * 0.6
+                on_press: root.on_calculator_press()
+
+            Button:
+                text: "Insert data"
+                background_color: 0, 1, 0, 1  # Green color
+                size_hint: None, None
+                height: root.height * 0.1
+                width: root.width * 0.6
+                on_press: root.on_insert_data_press()
+
+            Button:
+                text: "View data"
+                background_color: 0, 1, 0, 1  # Green color
+                size_hint: None, None
+                height: root.height * 0.1
+                width: root.width * 0.6
+                on_press: root.on_view_data_press()
+
+        Label:
+            text: "AI"
+            font_name: "Roboto-Bold"
+            font_size: root.width * 0.04
+            halign: 'center'
+            valign: 'middle'
+            bold: True
+            size_hint: None, None
+            width: root.width * 0.6
+            pos_hint: {"center_x": 0.5, "top": 0.3}  # Position it at the top center
+            color: 1, 1, 1, 1
+
+        # Bottom horizontal buttons (2 buttons centered)
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: None, None
+            width: root.width * 0.6  # Set width for bottom buttons
+            height: root.height * 0.1  # Set height for buttons
+            pos_hint: {"center_x": 0.5, "top": 0.15}  # Positioned at the bottom center of the pop-up
+            spacing: root.width * 0.05  # Space between buttons
+
+
+            Button:
+                text: "Prediction"
+                background_color: 0.9333, 0.5098, 0.9333, 1
+                size_hint: None, None
+                width: root.width * 0.28  # Button width, adjust as needed
+                height: root.height * 0.1
+                on_press: root.on_prediction_press()
+
+            Button:
+                text: "Tips"
+                background_color: 0.9333, 0.5098, 0.9333, 1
+                size_hint: None, None
+                width: root.width * 0.28  # Button width, adjust as needed
+                height: root.height * 0.1
+                on_press: root.on_tips_press()
+
+
+<CalculatorPopup>:
+    size_hint: 0.7, 0.8
+    title: ""  # Remove the title bar
+    separator_color: 0.1, 0.2, 0.3, 0
+    background_color: 0.1, 0.2, 0.3, 0.5
+
+    FloatLayout:
+        # Title Label at the top
+
+        Label:
+            text: "Calculator"
+            font_name: "Roboto-Bold"
+            font_size: self.width * 0.08
+            halign: "center"
+            valign: "middle"
+            bold: True
+            size_hint: None, None
+            size: root.width * 0.7, root.height * 0.1
+            pos_hint: {"center_x": 0.5, "top": 0.95}
+            color: 1, 1, 1, 1
+
+        # Vertical BoxLayout for images and text inputs
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: None, None
+            height: root.height * 0.6
+            width: root.width * 0.8
+            pos_hint: {"center_x": 0.5, "center_y": 0.55}
+            spacing: root.height * 0.1  # Add spacing between rows
+
+            # Image and Text Input 1
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 10
+                size_hint_y: None
+                height: root.height * 0.1
+
+                Image:
+                    source: "Media/electricity-icon.png"
+                    size_hint_x: None
+                    width: root.width * 0.15
+                    allow_stretch: True
+
+                TextInput:
+                    id: electricity_id
+                    hint_text: "Enter value of electricity"
+                    multiline: False
+                    font_size: root.width * 0.04
+                    foreground_color: 1,1,1,1
+                    size_hint_x: 1
+                    size_hint_y: 0.7
+                    background_color: 0, 0, 0, 0.5
+
+
+            # Image and Text Input 2
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 10
+                size_hint_y: None
+                height: root.height * 0.1
+
+                Image:
+                    source: "Media/water-icon.png"
+                    size_hint_x: None
+                    width: root.width * 0.15
+                    allow_stretch: True
+
+                TextInput:
+                    id: water_id
+                    hint_text: "Enter value of water"
+                    multiline: False
+                    font_size: root.width * 0.04
+                    foreground_color: 1,1,1,1
+                    size_hint_x: 1
+                    size_hint_y: 0.7
+                    background_color: 0, 0, 0, 0.5
+
+            # Image and Text Input 3
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 10
+                size_hint_y: None
+                height: root.height * 0.1
+
+                Image:
+                    source: "Media/gas-icon.png"
+                    size_hint_x: None
+                    width: root.width * 0.15
+                    allow_stretch: True
+
+                TextInput:
+                    id: gas_id
+                    hint_text: "Enter value of gas"
+                    multiline: False
+                    font_size: root.width * 0.04
+                    foreground_color: 1,1,1,1
+                    size_hint_x: 1
+                    size_hint_y: 0.7
+                    background_color: 0, 0, 0, 0.5
+
+        # Calculate Button
+        Button:
+            text: "Calculate"
+            size_hint: None, None
+            width: root.width * 0.5
+            height: root.height * 0.1
+            pos_hint: {"center_x": 0.5, "y": 0.05}
+            background_color: 0, 0.6, 0, 1  # Green color
+            font_size: root.width * 0.05
+            on_press: root.calculate()
+
+
+<InsertDataPopup>:
+    size_hint: 0.7, 0.8
+    title: ""  # Remove the title bar
+    separator_color: 0.1, 0.2, 0.3, 0
+    background_color: 0.1, 0.2, 0.3, 0.5
+
+    FloatLayout:
+        # Title Label at the top
+
+        Label:
+            text: "Insert Data"
+            font_name: "Roboto-Bold"
+            font_size: self.width * 0.08
+            halign: "center"
+            valign: "middle"
+            bold: True
+            size_hint: None, None
+            size: root.width * 0.7, root.height * 0.1
+            pos_hint: {"center_x": 0.5, "top": 0.95}
+            color: 1, 1, 1, 1
+
+        # Vertical BoxLayout for images and text inputs
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: None, None
+            height: root.height * 0.6
+            width: root.width * 0.8
+            pos_hint: {"center_x": 0.5, "center_y": 0.55}
+            spacing: root.height * 0.1  # Add spacing between rows
+
+            # Image and Text Input 1
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 10
+                size_hint_y: None
+                height: root.height * 0.1
+
+                Image:
+                    source: "Media/electricity-icon.png"
+                    size_hint_x: None
+                    width: root.width * 0.15
+                    allow_stretch: True
+
+                TextInput:
+                    id: electricity_id
+                    hint_text: "Enter value of electricity"
+                    multiline: False
+                    font_size: root.width * 0.04
+                    foreground_color: 1,1,1,1
+                    size_hint_x: 1
+                    size_hint_y: 0.7
+                    background_color: 0, 0, 0, 0.5
+
+
+            # Image and Text Input 2
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 10
+                size_hint_y: None
+                height: root.height * 0.1
+
+                Image:
+                    source: "Media/water-icon.png"
+                    size_hint_x: None
+                    width: root.width * 0.15
+                    allow_stretch: True
+
+                TextInput:
+                    id: water_id
+                    hint_text: "Enter value of water"
+                    multiline: False
+                    font_size: root.width * 0.04
+                    foreground_color: 1,1,1,1
+                    size_hint_x: 1
+                    size_hint_y: 0.7
+                    background_color: 0, 0, 0, 0.5
+
+            # Image and Text Input 3
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 10
+                size_hint_y: None
+                height: root.height * 0.1
+
+                Image:
+                    source: "Media/gas-icon.png"
+                    size_hint_x: None
+                    width: root.width * 0.15
+                    allow_stretch: True
+
+                TextInput:
+                    id: gas_id
+                    hint_text: "Enter value of gas"
+                    multiline: False
+                    font_size: root.width * 0.04
+                    foreground_color: 1,1,1,1
+                    size_hint_x: 1
+                    size_hint_y: 0.7
+                    background_color: 0, 0, 0, 0.5
+
+        # Calculate Button
+        Button:
+            text: "Insert"
+            size_hint: None, None
+            width: root.width * 0.5
+            height: root.height * 0.1
+            pos_hint: {"center_x": 0.5, "y": 0.05}
+            background_color: 0, 0.6, 0, 1  # Green color
+            font_size: root.width * 0.05
+            on_press: root.insert()

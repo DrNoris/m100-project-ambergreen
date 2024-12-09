@@ -1,0 +1,21 @@
+<AccountAppScreen>:
+    FloatLayout:
+        MapView:
+            id: map_view
+            zoom: 16
+            lat: 46.769838
+            lon: 23.5875915
+
+        Button:
+            id: account_button
+            size_hint: 0.1, 0.1
+            pos_hint: {"x": 0.05, "top": 0.95}
+            background_normal: ''  # Remove default button image
+            background_down: ''  # Remove button press image
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1  # White background for the circle
+                Ellipse:
+                    size: self.size
+                    pos: self.pos
+            on_release: root.on_account_button_click()
