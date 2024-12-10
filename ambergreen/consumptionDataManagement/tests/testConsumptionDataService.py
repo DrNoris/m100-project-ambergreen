@@ -39,7 +39,7 @@ class InMemoryRepository(AbstractRepository[ConsumptionData]):
 import unittest
 from consumptionDataManagement.entity.consumptionData import ConsumptionData
 from consumptionDataManagement.validator.consumptionDataValidator import ConsumptionDataValidator
-from consumptionDataManagement.service.consumptionDataService import ConsumptionDataService
+from ambergreen.consumptionDataManagement.service.consumptionDataService import ConsumptionDataService
 
 
 class TestConsumptionDataService(unittest.TestCase):

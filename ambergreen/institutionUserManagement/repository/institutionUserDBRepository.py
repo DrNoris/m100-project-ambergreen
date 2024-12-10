@@ -30,10 +30,10 @@ class InstitutionUserDBRepository(AbstractPostgresRepository[InstitutionUser]):
     def createTable(self):
         self.cursor.execute("""
                                     CREATE TABLE IF NOT EXISTS institution_users (
-                                                instiution_id INT PRIMARY KEY,
+                                                institution_id INT PRIMARY KEY,
                                                 username TEXT NOT NULL,
                                                 password TEXT NOT NULL,
-                                                constraint fk_institution FOREIGN KEY (instiution_id) REFERENCES Institutions(id) ON DELETE CASCADE
+                                                constraint fk_institution FOREIGN KEY (institution_id) REFERENCES Institutions(id) ON DELETE CASCADE
                                             )        
                                 """)
 

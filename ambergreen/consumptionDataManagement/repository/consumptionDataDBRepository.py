@@ -12,7 +12,7 @@ class ConsumptionDataDBRepository(AbstractPostgresRepository[ConsumptionData]):
             f"(institution_id, month, year, energy_consumption, water_consumption, gas_consumption, energy_provider, water_provider, gas_provider) "
             f"VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
             (
-                consumptionData.getId(),
+                consumptionData.getInstitutionId(),
                 consumptionData.getMonth(),
                 consumptionData.getYear(),
                 consumptionData.getEnergyConsumption(),
@@ -35,13 +35,14 @@ class ConsumptionDataDBRepository(AbstractPostgresRepository[ConsumptionData]):
     def createTable(self):
         self.cursor.execute("""
                             CREATE TABLE IF NOT EXISTS consumption_data (
-                                        instiution_id INT PRIMARY KEY,
+                                        consumption_data_id SERIAL PRIMARY KEY,
+                                        institution_id INT,
                                         month int NOT NULL,
                                         year int NOT NULL,
-                                        constraint fk_institution FOREIGN KEY (instiution_id) REFERENCES Institutions(id) ON DELETE CASCADE,
-                                        energy_consumption TEXT NOT NULL,
-                                        water_consumption TEXT NOT NULL,
-                                        gas_consumption TEXT NOT NULL,
+                                        constraint fk_institution FOREIGN KEY (institution_id) REFERENCES Institutions(id) ON DELETE CASCADE,
+                                        energy_consumption FLOAT NOT NULL,
+                                        water_consumption FLOAT NOT NULL,
+                                        gas_consumption FLOAT NOT NULL,
                                         energy_provider TEXT,
                                         water_provider TEXT,
                                         gas_provider TEXT
