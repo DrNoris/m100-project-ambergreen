@@ -4,11 +4,11 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy_garden.mapview import MapView
 from ambergreen.Domain.Buildings import Building
 from ambergreen.Domain.CostumeMarker import CostumeMarker
-from ambergreen.Domain.CostumePopUp import *
+from ambergreen.Domain.CostumePopUp import CostumePopUpAccount, CostumePopUpGuest, CostumePopUpAccountMenu
 from abc import abstractmethod
 from ambergreen.Domain.ImageButton import ImageButton
-from ambergreen.GUI.appRepository import AppRepository
-from ambergreen.GUI.appService import AppService
+from ambergreen.GUI.appRepository import AccountAppRepository, GuestAppRepository
+from ambergreen.GUI.appService import AccountAppService, GuestAppService
 from ambergreen.GUI.loginDBRepository import LoginDBRepository
 from ambergreen.GUI.loginService import LoginService
 from ambergreen.consumptionDataManagement.repository.consumptionDataDBRepository import ConsumptionDataDBRepository
@@ -34,15 +34,20 @@ class LoginScreen(Screen):
             consumptionDataDBRepository = ConsumptionDataDBRepository(*getLoginData())
             consumptionDataService = ConsumptionDataService(consumptionDataDBRepository, ConsumptionDataValidator())
 
-            appRepo = AppRepository(*getLoginData())
-            appService = AppService(result["institution"], appRepo, consumptionDataService)
+            appRepo = AccountAppRepository(*getLoginData())
+            appService = AccountAppService(result["institution"], appRepo, consumptionDataService)
 
             self.manager.get_screen("AccountAppScreen").set_user_data(result["institution"])
             self.manager.get_screen("AccountAppScreen").set_app_service(appService)
             self.manager.current = "AccountAppScreen"
 
     def guest_login(self):
-        self.manager.current = "guest"
+        guestAppRepo = GuestAppRepository(*getLoginData())
+        guestAppService = GuestAppService(guestAppRepo)
+
+        self.manager.get_screen("GuestAppScreen").set_app_service(guestAppService)
+
+        self.manager.current = "GuestAppScreen"
 
 class AbstractAppScreen(Screen):
     def on_enter(self):
@@ -115,7 +120,7 @@ class GuestAppScreen(AbstractAppScreen):
         super().__init__(**kwargs)
         self.appService = None
 
-    def set_app_service(self, appService: AppService):
+    def set_app_service(self, appService: GuestAppService):
         self.appService = appService
 
     def on_marker_click(self, value):
@@ -133,7 +138,7 @@ class AccountAppScreen(AbstractAppScreen):
     def set_user_data(self, user_data):
         self.user_data = user_data
 
-    def set_app_service(self, appService: AppService):
+    def set_app_service(self, appService: AccountAppService):
         self.appService = appService
 
     def on_enter(self):
@@ -167,7 +172,7 @@ class Main(App):
 
         # Add screens to ScreenManager
         sm.add_widget(LoginScreen(loginService, name="login"))
-        sm.add_widget(GuestAppScreen(name="guest"))
+        sm.add_widget(GuestAppScreen(name="GuestAppScreen"))
         sm.add_widget(AccountAppScreen(name="AccountAppScreen"))
 
         return sm

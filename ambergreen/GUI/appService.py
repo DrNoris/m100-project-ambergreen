@@ -1,10 +1,10 @@
-from ambergreen.GUI.appRepository import AppRepository
+from ambergreen.GUI.appRepository import AccountAppRepository, GuestAppRepository
 from ambergreen.consumptionDataManagement.entity.consumptionData import ConsumptionData
 from ambergreen.consumptionDataManagement.service.consumptionDataService import ConsumptionDataService
 import datetime
 
-class AppService:
-    def __init__(self, institution, appRepo: AppRepository, consumptionDataService: ConsumptionDataService):
+class AccountAppService:
+    def __init__(self, institution, appRepo: AccountAppRepository, consumptionDataService: ConsumptionDataService):
         self.appRepo = appRepo
         self.institution = institution
         self.consumptionDataService = consumptionDataService
@@ -15,5 +15,15 @@ class AppService:
         self.consumptionDataService.addConsumptionData(consumptionData)
 
     def getData(self, id):
-            return self.appRepo.getData(id)
+        return self.appRepo.getData(id)
 
+    def getDataGraph(self, institution):
+        return self.appRepo.getDataGraph(institution["id"])
+
+
+class GuestAppService:
+    def __init__(self, appRepo: GuestAppRepository):
+        self.appRepo = appRepo
+
+    def getData(self, id):
+            return self.appRepo.getData(id)
