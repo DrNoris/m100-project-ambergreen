@@ -12,9 +12,6 @@ class TestConsumptionData(unittest.TestCase):
             energyConsumption=300,
             gasConsumption=100,
             waterConsumption=150,
-            energyProvider="Provider A",
-            gasProvider="Provider B",
-            waterProvider="Provider C",
             institutionId=42
         )
 
@@ -28,9 +25,6 @@ class TestConsumptionData(unittest.TestCase):
         self.assertEqual(self.data.getEnergyConsumption(), 300)
         self.assertEqual(self.data.getGasConsumption(), 100)
         self.assertEqual(self.data.getWaterConsumption(), 150)
-        self.assertEqual(self.data.getEnergyProvider(), "Provider A")
-        self.assertEqual(self.data.getGasProvider(), "Provider B")
-        self.assertEqual(self.data.getWaterProvider(), "Provider C")
 
     def test_equality_same_institution_id(self):
         """
@@ -42,9 +36,6 @@ class TestConsumptionData(unittest.TestCase):
             energyConsumption=400,
             gasConsumption=200,
             waterConsumption=250,
-            energyProvider="Another Provider",
-            gasProvider="Another Gas Provider",
-            waterProvider="Another Water Provider",
             institutionId=42
         )
         self.assertEqual(self.data, data2)
@@ -59,9 +50,6 @@ class TestConsumptionData(unittest.TestCase):
             energyConsumption=300,
             gasConsumption=100,
             waterConsumption=150,
-            energyProvider="Provider A",
-            gasProvider="Provider B",
-            waterProvider="Provider C",
             institutionId=99
         )
         self.assertNotEqual(self.data, data2)
@@ -76,15 +64,9 @@ class TestConsumptionData(unittest.TestCase):
             energyConsumption=300,
             gasConsumption=100,
             waterConsumption=150,
-            energyProvider=None,
-            gasProvider=None,
-            waterProvider=None,
             institutionId=None
         )
         self.assertIsNone(data.getInstitutionId())
-        self.assertIsNone(data.getEnergyProvider())
-        self.assertIsNone(data.getGasProvider())
-        self.assertIsNone(data.getWaterProvider())
 
 if __name__ == "__main__":
     unittest.main()

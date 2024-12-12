@@ -1,5 +1,6 @@
 from typing import Dict, List
 from ambergreen.consumptionDataManagement.entity.consumptionData import ConsumptionData
+from ambergreen.consumptionDataManagement.validator.consumptionDataValidator import ConsumptionDataValidator
 from ambergreen.sharedInfrastructure.abstractRepository import AbstractRepository
 
 
@@ -37,8 +38,6 @@ class InMemoryRepository(AbstractRepository[ConsumptionData]):
 
 
 import unittest
-from consumptionDataManagement.entity.consumptionData import ConsumptionData
-from consumptionDataManagement.validator.consumptionDataValidator import ConsumptionDataValidator
 from ambergreen.consumptionDataManagement.service.consumptionDataService import ConsumptionDataService
 
 
@@ -56,9 +55,6 @@ class TestConsumptionDataService(unittest.TestCase):
             energyConsumption=150.5,
             gasConsumption=80.2,
             waterConsumption=50.3,
-            energyProvider="Energy Provider",
-            gasProvider="Gas Provider",
-            waterProvider="Water Provider",
             institutionId=1
         )
 
@@ -82,15 +78,11 @@ class TestConsumptionDataService(unittest.TestCase):
             energyConsumption=200.0,
             gasConsumption=90.0,
             waterConsumption=60.0,
-            energyProvider="Updated Energy Provider",
-            gasProvider="Updated Gas Provider",
-            waterProvider="Updated Water Provider",
             institutionId=1
         )
         self.service.updateConsumptionData(updated_data)
         fetched_data = self.service.getConsumptionData(1, 5, 2023)
         self.assertEqual(fetched_data.getEnergyConsumption(), 200.0)
-        self.assertEqual(fetched_data.getEnergyProvider(), "Updated Energy Provider")
 
     def test_get_consumption_data(self):
         self.service.addConsumptionData(self.sample_data)
@@ -106,9 +98,6 @@ class TestConsumptionDataService(unittest.TestCase):
             energyConsumption=150.5,
             gasConsumption=80.2,
             waterConsumption=50.3,
-            energyProvider="Provider A",
-            gasProvider="Provider B",
-            waterProvider="Provider C",
             institutionId=1
         )
         data2 = ConsumptionData(
@@ -117,9 +106,6 @@ class TestConsumptionDataService(unittest.TestCase):
             energyConsumption=170.0,
             gasConsumption=85.0,
             waterConsumption=55.0,
-            energyProvider="Provider X",
-            gasProvider="Provider Y",
-            waterProvider="Provider Z",
             institutionId=1
         )
         self.service.addConsumptionData(data1)

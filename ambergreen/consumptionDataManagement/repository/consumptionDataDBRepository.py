@@ -1,6 +1,8 @@
-from ambergreen.consumptionDataManagement.entity.consumptionData import ConsumptionData
-from ambergreen.sharedInfrastructure.abstractPostgresRepository import AbstractPostgresRepository
+from typing import List, Dict
 
+from ambergreen.consumptionDataManagement.entity.consumptionData import ConsumptionData
+from ambergreen.dto.ConsumptionDataFilterDTO import ConsumptionDataFilterDTO
+from ambergreen.sharedInfrastructure.abstractPostgresRepository import AbstractPostgresRepository
 
 class ConsumptionDataDBRepository(AbstractPostgresRepository[ConsumptionData]):
     def __init__(self, host, database, user, password):
@@ -9,18 +11,15 @@ class ConsumptionDataDBRepository(AbstractPostgresRepository[ConsumptionData]):
     def add(self, consumptionData: ConsumptionData):
         self.cursor.execute(
             f"INSERT INTO {self.getTableName()} "
-            f"(institution_id, month, year, energy_consumption, water_consumption, gas_consumption, energy_provider, water_provider, gas_provider) "
-            f"VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            f"(institution_id, month, year, energy_consumption, water_consumption, gas_consumption) "
+            f"VALUES (%s, %s, %s, %s, %s, %s)",
             (
                 consumptionData.getInstitutionId(),
                 consumptionData.getMonth(),
                 consumptionData.getYear(),
                 consumptionData.getEnergyConsumption(),
                 consumptionData.getWaterConsumption(),
-                consumptionData.getGasConsumption(),
-                consumptionData.getEnergyProvider() if consumptionData.getEnergyProvider() is not None else None,
-                consumptionData.getWaterProvider() if consumptionData.getWaterProvider() is not None else None,
-                consumptionData.getGasProvider() if consumptionData.getGasProvider() is not None else None
+                consumptionData.getGasConsumption()
             )
         )
         self.connection.commit()
@@ -35,7 +34,6 @@ class ConsumptionDataDBRepository(AbstractPostgresRepository[ConsumptionData]):
     def createTable(self):
         self.cursor.execute("""
                             CREATE TABLE IF NOT EXISTS consumption_data (
-                                        consumption_data_id SERIAL PRIMARY KEY,
                                         institution_id INT,
                                         month int NOT NULL,
                                         year int NOT NULL,
@@ -45,7 +43,8 @@ class ConsumptionDataDBRepository(AbstractPostgresRepository[ConsumptionData]):
                                         gas_consumption FLOAT NOT NULL,
                                         energy_provider TEXT,
                                         water_provider TEXT,
-                                        gas_provider TEXT
+                                        gas_provider TEXT,
+                                        PRIMARY KEY (institution_id, month, year)
                                     )        
                         """)
         self.connection.commit()
@@ -60,16 +59,7 @@ class ConsumptionDataDBRepository(AbstractPostgresRepository[ConsumptionData]):
         energy_consumption = row[3]
         water_consumption = row[4]
         gas_consumption = row[5]
-        energy_provider = None
-        water_provider = None
-        gas_provider = None
-        if row[6] is not None:
-            energy_provider = row[6]
-        if row[7] is not None:
-            water_provider = row[7]
-        if row[8] is not None:
-            gas_provider = row[8]
-        return ConsumptionData(month, year, energy_consumption, water_consumption, gas_consumption, energy_provider, water_provider, gas_provider, institutionId)
+        return ConsumptionData(institutionId, month, year, energy_consumption, water_consumption, gas_consumption)
 
     def get(self, entity_id) -> ConsumptionData | None:
         if isinstance(entity_id, list):
@@ -94,3 +84,28 @@ class ConsumptionDataDBRepository(AbstractPostgresRepository[ConsumptionData]):
                 raise KeyError(f"Entity with institution ID {entity_id[0]}, on month {entity_id[1]} and year {entity_id[2]} not found.")
 
             self.connection.commit()
+
+
+    def getConsumptionDataFiltered(self, consumptionDataFilterDTO: ConsumptionDataFilterDTO) -> List[Dict]:
+        sql = "SELECT * FROM " + self.getTableName() + " "
+
+        values = []
+        if consumptionDataFilterDTO is not None:
+            sql = sql + "WHERE institution_id = %s"
+            values.append(consumptionDataFilterDTO.get_institution_id())
+
+        self.cursor.execute(sql, values)
+        results = self.cursor.fetchall()
+        list = []
+        for result in results:
+            consumptionData = self.mapRowToEntity(result)
+            list.append(
+                {
+                    "month": str(consumptionData.getYear()) + "-" + str(consumptionData.getMonth()),
+                    "energy_kwh": consumptionData.getEnergyConsumption(),
+                    "gas_m3": consumptionData.getGasConsumption(),
+                    "water_m3": consumptionData.getWaterConsumption(),
+                }
+            )
+        return list
+

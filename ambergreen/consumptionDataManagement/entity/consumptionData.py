@@ -3,20 +3,16 @@ from ambergreen.sharedInfrastructure.entity import Entity
 
 class ConsumptionData(Entity):
 
-    def __init__(self, institutionId, month, year, energyConsumption, gasConsumption, waterConsumption, energyProvider = None, gasProvider = None, waterProvider = None):
-        super().__init__()
-        self.__institutionId = institutionId
+    def __init__(self, institutionId, month, year, energyConsumption, gasConsumption, waterConsumption):
+        super().__init__(institutionId)
         self.__month = month
         self.__year = year
         self.__energyConsumption = energyConsumption
         self.__gasConsumption = gasConsumption
         self.__waterConsumption = waterConsumption
-        self.__energyProvider = energyProvider
-        self.__gasProvider = gasProvider
-        self.__waterProvider = waterProvider
 
     def getInstitutionId(self):
-        return self.__institutionId
+        return super().getId()
 
     def getMonth(self):
         return self.__month
@@ -33,14 +29,12 @@ class ConsumptionData(Entity):
     def getWaterConsumption(self):
         return self.__waterConsumption
 
-    def getEnergyProvider(self):
-        return self.__energyProvider
-
-    def getGasProvider(self):
-        return self.__gasProvider
-
-    def getWaterProvider(self):
-        return self.__waterProvider
-
     def __eq__(self, other):
         return self.getInstitutionId() == other.getInstitutionId()
+
+    def __str__(self):
+        return (
+            f"ConsumptionData(InstitutionId={self.getInstitutionId()}, Month={self.__month}, Year={self.__year}, "
+            f"EnergyConsumption={self.__energyConsumption}, GasConsumption={self.__gasConsumption}, "
+            f"WaterConsumption={self.__waterConsumption})"
+        )

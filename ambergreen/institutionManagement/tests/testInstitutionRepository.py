@@ -10,7 +10,7 @@ class TestInstitutionRepository(unittest.TestCase):
         self.host = "localhost"
         self.database = "m100"
         self.user = "postgres"
-        self.password = "noris2580"
+        self.password = "postgres"
 
     def test_connection(self):
         try:

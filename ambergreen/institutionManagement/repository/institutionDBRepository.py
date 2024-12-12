@@ -10,8 +10,8 @@ class InstitutionDBRepository(AbstractPostgresRepository[Institution]):
 
     def add(self, institution: Institution):
         self.cursor.execute(
-                "INSERT INTO " + self.getTableName() + " (name, address) VALUES (%s, %s)",
-                (institution.getName(), institution.getAddress())
+                "INSERT INTO " + self.getTableName() + " (name, address, energy_provider, water_provider, gas_provider) VALUES (%s, %s, %s, %s, %s)",
+                (institution.getName(), institution.getAddress(), institution.getEnergyProvider(), institution.getWaterProvider(), institution.getGasProvider())
             )
         self.connection.commit()
 
@@ -19,10 +19,10 @@ class InstitutionDBRepository(AbstractPostgresRepository[Institution]):
         self.cursor.execute(
             """
             UPDATE institutions
-            SET name = %s, address = %s
+            SET name = %s, address = %s, energy_provider = %s, water_provider = %s, gas_provider = %s
             WHERE id = %s
             """,
-            (institution.getName(), institution.getAddress(), institution.getId())
+            (institution.getName(), institution.getAddress(), institution.getEnergyProvider(), institution.getWaterProvider(), institution.getGasProvider(), institution.getId())
         )
         self.connection.commit()
 
@@ -31,8 +31,14 @@ class InstitutionDBRepository(AbstractPostgresRepository[Institution]):
             CREATE TABLE IF NOT EXISTS institutions (
                         id SERIAL PRIMARY KEY,
                         name TEXT NOT NULL,
-                        address TEXT NOT NULL
-                    )        
+                        address TEXT NOT NULL,
+                        energy_provider TEXT NOT NULL,
+                        water_provider TEXT NOT NULL,
+                        gas_provider TEXT NOT NULL,
+                        foreign key (energy_provider) REFERENCES providers(provider_name),
+                        foreign key (water_provider) REFERENCES providers(provider_name),
+                        foreign key (gas_provider) REFERENCES providers(provider_name)
+                )
         """)
         self.connection.commit()
 
@@ -43,5 +49,17 @@ class InstitutionDBRepository(AbstractPostgresRepository[Institution]):
         institution_id = int(row[0])
         name = row[1]
         address = row[2]
-        return Institution(name, address, institution_id)
+        if row[3] is None:
+            energy_provider = None
+        else: energy_provider = row[3]
+
+        if row[4] is None:
+            water_provider = None
+        else: water_provider = row[4]
+
+        if row[5] is None:
+            gas_provider = None
+        else: gas_provider = row[5]
+
+        return Institution(name, address, energy_provider, water_provider, gas_provider, institution_id)
 
