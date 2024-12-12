@@ -57,7 +57,7 @@ class ConsumptionDataDBRepository(AbstractPostgresRepository[ConsumptionData]):
         energy_consumption = row[3]
         water_consumption = row[4]
         gas_consumption = row[5]
-        return ConsumptionData(month, year, energy_consumption, water_consumption, gas_consumption, energy_provider)
+        return ConsumptionData(institutionId, month, year, energy_consumption, water_consumption, gas_consumption)
 
     def get(self, entity_id) -> ConsumptionData | None:
         if isinstance(entity_id, list):
