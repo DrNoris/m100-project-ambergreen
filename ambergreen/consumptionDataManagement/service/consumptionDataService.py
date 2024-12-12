@@ -1,12 +1,15 @@
-from typing import List
+from typing import List, Dict
 
 from ambergreen.consumptionDataManagement.entity.consumptionData import ConsumptionData
+from ambergreen.consumptionDataManagement.repository.consumptionDataDBRepository import ConsumptionDataDBRepository
 from ambergreen.consumptionDataManagement.validator.consumptionDataValidator import ConsumptionDataValidator
+from ambergreen.dto.ConsumptionDataFilterDTO import ConsumptionDataFilterDTO
 from ambergreen.sharedInfrastructure.abstractRepository import AbstractRepository
+from ambergreen.utils.EmmisionsDataLoader import EmissionsDataLoader
 
 
 class ConsumptionDataService:
-    def __init__(self, repo: AbstractRepository, validator: ConsumptionDataValidator):
+    def __init__(self, repo: ConsumptionDataDBRepository, validator: ConsumptionDataValidator):
         self.repo = repo
         self.validator = validator
 
@@ -57,5 +60,19 @@ class ConsumptionDataService:
 
     def getAllConsumptionData(self) -> List[ConsumptionData]:
         return self.repo.getAll()
+
+    def getConsumptionDataForInstitution(self, institution_id: int) -> List[Dict]:
+        return self.repo.getConsumptionDataFiltered(ConsumptionDataFilterDTO(institution_id))
+
+    def saveConsumptionDataJSON(self, institution_id, json_path: str):
+        data = EmissionsDataLoader.process_json_path(json_path)
+        for consumption in data:
+            date = consumption['month']
+            year, month = map(int, date.split('-'))
+            energy = consumption['energy_kwh']
+            gas = consumption['gas_m3']
+            water = consumption['water_m3']
+            consumptionData = ConsumptionData(institution_id, month, year, energy, gas, water)
+            self.repo.add(consumptionData)
 
 

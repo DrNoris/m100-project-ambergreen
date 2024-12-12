@@ -29,7 +29,7 @@ class InstitutionService:
         except Exception as e:
             print(e)
 
-    def getInstitution(self, institution_id : int):
+    def getInstitution(self, institution_id : int)->Institution:
         try:
             return self.repo.get(institution_id)
         except Exception as e:

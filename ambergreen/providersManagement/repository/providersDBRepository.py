@@ -43,3 +43,16 @@ class ProviderDBRepository(AbstractPostgresRepository[Provider]):
         emission_factor = float(row[1]) if row[1] is not None else None
         service_provided = row[2]
         return Provider(provider_name, emission_factor, service_provided)
+
+    def get(self, provider_name) -> Provider | None:
+        if isinstance(provider_name, str):
+            self.cursor.execute(
+                "SELECT * FROM " + self.getTableName() + " WHERE provider_name = %s",
+                (provider_name,)
+            )
+            result = self.cursor.fetchone()
+
+            if result is None:
+                raise KeyError(f"Entity with provider name {provider_name} not found")
+
+            return self.mapRowToEntity(result)

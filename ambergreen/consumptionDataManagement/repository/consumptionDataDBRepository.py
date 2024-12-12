@@ -1,6 +1,8 @@
-from ambergreen.consumptionDataManagement.entity.consumptionData import ConsumptionData
-from ambergreen.sharedInfrastructure.abstractPostgresRepository import AbstractPostgresRepository
+from typing import List, Dict
 
+from ambergreen.consumptionDataManagement.entity.consumptionData import ConsumptionData
+from ambergreen.dto.ConsumptionDataFilterDTO import ConsumptionDataFilterDTO
+from ambergreen.sharedInfrastructure.abstractPostgresRepository import AbstractPostgresRepository
 
 class ConsumptionDataDBRepository(AbstractPostgresRepository[ConsumptionData]):
     def __init__(self, host, database, user, password):
@@ -82,3 +84,28 @@ class ConsumptionDataDBRepository(AbstractPostgresRepository[ConsumptionData]):
                 raise KeyError(f"Entity with institution ID {entity_id[0]}, on month {entity_id[1]} and year {entity_id[2]} not found.")
 
             self.connection.commit()
+
+
+    def getConsumptionDataFiltered(self, consumptionDataFilterDTO: ConsumptionDataFilterDTO) -> List[Dict]:
+        sql = "SELECT * FROM " + self.getTableName() + " "
+
+        values = []
+        if consumptionDataFilterDTO is not None:
+            sql = sql + "WHERE institution_id = %s"
+            values.append(consumptionDataFilterDTO.get_institution_id())
+
+        self.cursor.execute(sql, values)
+        results = self.cursor.fetchall()
+        list = []
+        for result in results:
+            consumptionData = self.mapRowToEntity(result)
+            list.append(
+                {
+                    "month": str(consumptionData.getYear()) + "-" + str(consumptionData.getMonth()),
+                    "energy_kwh": consumptionData.getEnergyConsumption(),
+                    "gas_m3": consumptionData.getGasConsumption(),
+                    "water_m3": consumptionData.getWaterConsumption(),
+                }
+            )
+        return list
+

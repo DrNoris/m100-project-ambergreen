@@ -26,7 +26,7 @@ class ProviderService:
         except Exception as e:
             print(e)
 
-    def getProvider(self, provider_name: str):
+    def getProvider(self, provider_name: str) -> Provider:
         try:
             return self.repo.get(provider_name)
         except Exception as e:
