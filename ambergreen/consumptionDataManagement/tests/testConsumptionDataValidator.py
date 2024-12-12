@@ -15,9 +15,6 @@ class TestConsumptionDataValidator(unittest.TestCase):
             energyConsumption=150.5,
             gasConsumption=80.2,
             waterConsumption=50.3,
-            energyProvider="Energy Provider",
-            gasProvider="Gas Provider",
-            waterProvider="Water Provider",
             institutionId=1
         )
 

@@ -3,7 +3,7 @@ from ambergreen.sharedInfrastructure.entity import Entity
 
 class ConsumptionData(Entity):
 
-    def __init__(self, institutionId, month, year, energyConsumption, gasConsumption, waterConsumption, energyProvider = None, gasProvider = None, waterProvider = None):
+    def __init__(self, institutionId, month, year, energyConsumption, gasConsumption, waterConsumption):
         super().__init__()
         self.__institutionId = institutionId
         self.__month = month
@@ -11,9 +11,6 @@ class ConsumptionData(Entity):
         self.__energyConsumption = energyConsumption
         self.__gasConsumption = gasConsumption
         self.__waterConsumption = waterConsumption
-        self.__energyProvider = energyProvider
-        self.__gasProvider = gasProvider
-        self.__waterProvider = waterProvider
 
     def getInstitutionId(self):
         return self.__institutionId
@@ -32,15 +29,6 @@ class ConsumptionData(Entity):
 
     def getWaterConsumption(self):
         return self.__waterConsumption
-
-    def getEnergyProvider(self):
-        return self.__energyProvider
-
-    def getGasProvider(self):
-        return self.__gasProvider
-
-    def getWaterProvider(self):
-        return self.__waterProvider
 
     def __eq__(self, other):
         return self.getInstitutionId() == other.getInstitutionId()

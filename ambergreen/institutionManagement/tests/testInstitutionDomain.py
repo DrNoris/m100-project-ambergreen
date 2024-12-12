@@ -24,13 +24,29 @@ class TestInstitutionDomain(unittest.TestCase):
         self.assertEqual(institution1, institution2)
 
     def test_inequality(self):
-        institution1 = Institution("University of Python", "123 Python St", 1)
-        institution2 = Institution("University of Python", "456 Other St", 2)
+        institution1 = Institution("University of Python", "123 Python St", energy_provider=None, water_provider=None, gas_provider=None, entity_id=1)
+        institution2 = Institution("University of Python", "456 Other St", energy_provider=None, water_provider=None, gas_provider=None, entity_id=2)
         self.assertNotEqual(institution1, institution2)
 
     def test_repr(self):
-        institution = Institution("University of Python", "123 Python St", 1)
-        expected_repr = "entity_id=1, name='University of Python', address='123 Python St'"
+        institution = Institution(
+            "University of Python",
+            "123 Python St",
+            energy_provider="Energy Inc.",
+            water_provider="Water Co.",
+            gas_provider="Gas LLC.",
+            entity_id=1
+        )
+        expected_repr = (
+            "Institution("
+            "entity_id=1, "
+            "name='University of Python', "
+            "address='123 Python St', "
+            "energy_provider='Energy Inc.', "
+            "water_provider='Water Co.', "
+            "gas_provider='Gas LLC.'"
+            ")"
+        )
         self.assertEqual(repr(institution), expected_repr)
 
 
