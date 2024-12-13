@@ -139,3 +139,6 @@ class EmissionsPredictor:
         self.equipment_growth_rate = model_data['equipment_growth_rate']
         self.temperature_trend = model_data['temperature_trend']
         self.training_end_date = model_data['training_end_date']
+
+    def isTrained(self) -> bool:
+        return self.trained == True

@@ -102,9 +102,9 @@ class ConsumptionDataDBRepository(AbstractPostgresRepository[ConsumptionData]):
             list.append(
                 {
                     "month": str(consumptionData.getYear()) + "-" + str(consumptionData.getMonth()),
-                    "energy_kwh": consumptionData.getEnergyConsumption(),
-                    "gas_m3": consumptionData.getGasConsumption(),
-                    "water_m3": consumptionData.getWaterConsumption(),
+                    "energy_kwh": float(consumptionData.getEnergyConsumption()),
+                    "gas_m3": float(consumptionData.getGasConsumption()),
+                    "water_m3": float(consumptionData.getWaterConsumption()),
                 }
             )
         return list
