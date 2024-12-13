@@ -5,7 +5,7 @@ from ambergreen.consumptionDataManagement.repository.consumptionDataDBRepository
 from ambergreen.consumptionDataManagement.validator.consumptionDataValidator import ConsumptionDataValidator
 from ambergreen.dto.ConsumptionDataFilterDTO import ConsumptionDataFilterDTO
 from ambergreen.sharedInfrastructure.abstractRepository import AbstractRepository
-from ambergreen.utils.EmmisionsDataLoader import EmissionsDataLoader
+from ambergreen.utils.emmisionsDataLoader import EmissionsDataLoader
 
 
 class ConsumptionDataService:

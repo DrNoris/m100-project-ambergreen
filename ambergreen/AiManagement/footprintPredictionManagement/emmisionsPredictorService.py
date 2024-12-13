@@ -1,9 +1,9 @@
-from ambergreen.AiManagement.footprintPredictionManagement.EmmisionsPredictor import EmissionsPredictor
+from ambergreen.AiManagement.footprintPredictionManagement.emmisionsPredictor import EmissionsPredictor
 from ambergreen.consumptionDataManagement.service.consumptionDataService import ConsumptionDataService
 from ambergreen.institutionManagement.entity.institution import Institution
 from ambergreen.institutionManagement.service.institutionService import InstitutionService
 from ambergreen.providersManagement.service.providerService import ProviderService
-from ambergreen.utils.EmmisionsDataLoader import EmissionsDataLoader
+from ambergreen.utils.emmisionsDataLoader import EmissionsDataLoader
 
 
 class EmmisionsPredictorService:
