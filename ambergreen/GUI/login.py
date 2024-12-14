@@ -2,18 +2,27 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy_garden.mapview import MapView
+
+from ambergreen.AiManagement.footprintPredictionManagement.emmisionsPredictor import EmissionsPredictor
+from ambergreen.AiManagement.recomandationsManagement.recomandationService import RecomandationService
 from ambergreen.Domain.Buildings import Building
 from ambergreen.Domain.CostumeMarker import CostumeMarker
-from ambergreen.Domain.CostumePopUp import CostumePopUpAccount, CostumePopUpGuest, CostumePopUpAccountMenu
+from ambergreen.Domain.CostumePopUp import CostumePopUpAccountData, CostumePopUpGuest, CostumePopUpAccountMenu
 from abc import abstractmethod
 from ambergreen.Domain.ImageButton import ImageButton
-from ambergreen.GUI.appRepository import AccountAppRepository, GuestAppRepository
-from ambergreen.GUI.appService import AccountAppService, GuestAppService
 from ambergreen.GUI.loginDBRepository import LoginDBRepository
 from ambergreen.GUI.loginService import LoginService
 from ambergreen.consumptionDataManagement.repository.consumptionDataDBRepository import ConsumptionDataDBRepository
 from ambergreen.consumptionDataManagement.service.consumptionDataService import ConsumptionDataService
 from ambergreen.consumptionDataManagement.validator.consumptionDataValidator import ConsumptionDataValidator
+from ambergreen.footprintCalculatorManagement.footprintCalculator import FootprintCalculator
+from ambergreen.institutionManagement.repository.institutionDBRepository import InstitutionDBRepository
+from ambergreen.institutionManagement.service import institutionService
+from ambergreen.institutionManagement.service.institutionService import InstitutionService
+from ambergreen.institutionManagement.validator.institutionValidator import InstitutionValidator
+from ambergreen.providersManagement.repository.providersDBRepository import ProviderDBRepository
+from ambergreen.providersManagement.service.providerService import ProviderService
+from ambergreen.utils.emmisionsDataLoader import EmissionsDataLoader
 
 Builder.load_file("popup_design.kv")
 
@@ -34,18 +43,18 @@ class LoginScreen(Screen):
             consumptionDataDBRepository = ConsumptionDataDBRepository(*getLoginData())
             consumptionDataService = ConsumptionDataService(consumptionDataDBRepository, ConsumptionDataValidator())
 
-            appRepo = AccountAppRepository(*getLoginData())
-            appService = AccountAppService(result["institution"], appRepo, consumptionDataService)
-
             self.manager.get_screen("AccountAppScreen").set_user_data(result["institution"])
-            self.manager.get_screen("AccountAppScreen").set_app_service(appService)
+            self.manager.get_screen("AccountAppScreen").set_app_service(consumptionDataService)
             self.manager.current = "AccountAppScreen"
 
     def guest_login(self):
-        guestAppRepo = GuestAppRepository(*getLoginData())
-        guestAppService = GuestAppService(guestAppRepo)
+        consumptionDataDBRepository = ConsumptionDataDBRepository(*getLoginData())
+        consumptionDataService = ConsumptionDataService(consumptionDataDBRepository, ConsumptionDataValidator())
 
-        self.manager.get_screen("GuestAppScreen").set_app_service(guestAppService)
+        institutionRepo = InstitutionDBRepository(*getLoginData())
+        institutionsService = InstitutionService(institutionRepo, InstitutionValidator())
+
+        self.manager.get_screen("GuestAppScreen").set_app_service(consumptionDataService, institutionsService)
 
         self.manager.current = "GuestAppScreen"
 
@@ -63,7 +72,7 @@ class AbstractAppScreen(Screen):
 
         self.primarie_marker = CostumeMarker(lat=Building.Primarie.value.lat, lon=Building.Primarie.value.lon)
         self.map_view.add_widget(self.primarie_marker)
-        self.primarie_marker.bind(on_release=lambda instance: self.on_marker_click(2))
+        self.primarie_marker.bind(on_release=lambda instance: self.on_marker_click(1))
 
         #self.casaDeCulturaAStudentilor_marker = CostumeMarker(lat=Building.CasaDeCulturaAStudentilor.value.lat, lon=Building.CasaDeCulturaAStudentilor.value.lon)
         #self.map_view.add_widget(self.casaDeCulturaAStudentilor_marker)
@@ -118,28 +127,37 @@ class AbstractAppScreen(Screen):
 class GuestAppScreen(AbstractAppScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.appService = None
+        self.consumptionDataService = None
+        self.institutionService = None
 
-    def set_app_service(self, appService: GuestAppService):
-        self.appService = appService
+    def set_app_service(self, consumptionDataService: ConsumptionDataService, institutionService: InstitutionService):
+        self.consumptionDataService = consumptionDataService
+        self.institutionService = institutionService
 
     def on_marker_click(self, value):
-        data = self.appService.getData(value)
+        data = self.consumptionDataService.getTotalConsumptionDataForInstitution(value)
 
-        popup = CostumePopUpGuest(data)
+        footprint_calculator = FootprintCalculator()
+
+        data['co2_footprint'] = footprint_calculator.calculate(data)
+        data['trees_footprint'] = round(data['co2_footprint'] / 0.89, 2)
+
+        institution = self.institutionService.getInstitution(value)
+
+        popup = CostumePopUpGuest({'name': institution.getName(), 'address': institution.getAddress()}, data)
         popup.open()
 
 class AccountAppScreen(AbstractAppScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.user_data = None
-        self.appService = None
+        self.consumptionDataService = None
 
     def set_user_data(self, user_data):
         self.user_data = user_data
 
-    def set_app_service(self, appService: AccountAppService):
-        self.appService = appService
+    def set_app_service(self, consumptionDataService: ConsumptionDataService):
+        self.consumptionDataService = consumptionDataService
 
     def on_enter(self):
         super().on_enter()
@@ -153,13 +171,18 @@ class AccountAppScreen(AbstractAppScreen):
         self.add_widget(self.account_button)
 
     def on_marker_click(self, value):
-        data = self.appService.getData(value)
+        data = self.consumptionDataService.getTotalConsumptionDataForInstitution(value)
 
-        popup = CostumePopUpAccount(data)
+        footprint_calculator = FootprintCalculator()
+
+        data['co2_footprint'] = footprint_calculator.calculate(data)
+        data['trees_footprint'] = round(data['co2_footprint'] / 0.89, 2)
+
+        popup = CostumePopUpAccountData(self.user_data, data)
         popup.open()
 
     def on_account_button_click(self, instance):
-        popup = CostumePopUpAccountMenu(self.user_data, self.appService)
+        popup = CostumePopUpAccountMenu(self.user_data, self.consumptionDataService)
         popup.open()
 
 class Main(App):
@@ -168,7 +191,6 @@ class Main(App):
 
         loginRepo = LoginDBRepository(*getLoginData())
         loginService = LoginService(loginRepo)
-
 
         # Add screens to ScreenManager
         sm.add_widget(LoginScreen(loginService, name="login"))

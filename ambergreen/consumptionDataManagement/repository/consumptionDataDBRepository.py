@@ -85,17 +85,24 @@ class ConsumptionDataDBRepository(AbstractPostgresRepository[ConsumptionData]):
 
             self.connection.commit()
 
-
-    def getConsumptionDataFiltered(self, consumptionDataFilterDTO: ConsumptionDataFilterDTO) -> List[Dict]:
+    def getConsumptionDataFiltered(self, consumptionDataFilterDTO: ConsumptionDataFilterDTO, size) -> List[Dict]:
         sql = "SELECT * FROM " + self.getTableName() + " "
 
         values = []
+
         if consumptionDataFilterDTO is not None:
             sql = sql + "WHERE institution_id = %s"
             values.append(consumptionDataFilterDTO.get_institution_id())
 
+        sql = sql + " ORDER BY year DESC, month DESC"
+
+        if size != -1:
+            sql = sql + " LIMIT %s"
+            values.append(size)
+
         self.cursor.execute(sql, values)
         results = self.cursor.fetchall()
+
         list = []
         for result in results:
             consumptionData = self.mapRowToEntity(result)
@@ -107,5 +114,32 @@ class ConsumptionDataDBRepository(AbstractPostgresRepository[ConsumptionData]):
                     "water_m3": float(consumptionData.getWaterConsumption()),
                 }
             )
+
         return list
 
+    def getTotalConsumptionDataFiltered(self, consumptionDataFilterDTO: ConsumptionDataFilterDTO) -> Dict:
+        sql = "SELECT * FROM " + self.getTableName() + " "
+
+        values = []
+        if consumptionDataFilterDTO is not None:
+            sql = sql + "WHERE institution_id = %s"
+            values.append(consumptionDataFilterDTO.get_institution_id())
+
+        self.cursor.execute(sql, values)
+        results = self.cursor.fetchall()
+
+        total_energy = 0.0
+        total_gas = 0.0
+        total_water = 0.0
+
+        for result in results:
+            consumptionData = self.mapRowToEntity(result)
+            total_energy += float(consumptionData.getEnergyConsumption())
+            total_gas += float(consumptionData.getGasConsumption())
+            total_water += float(consumptionData.getWaterConsumption())
+
+        return {
+            "energy_kwh": round(total_energy, 2),
+            "gas_m3": round(total_gas, 2),
+            "water_m3": round(total_water, 2),
+        }

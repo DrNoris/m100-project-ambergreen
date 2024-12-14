@@ -61,8 +61,11 @@ class ConsumptionDataService:
     def getAllConsumptionData(self) -> List[ConsumptionData]:
         return self.repo.getAll()
 
-    def getConsumptionDataForInstitution(self, institution_id: int) -> List[Dict]:
-        return self.repo.getConsumptionDataFiltered(ConsumptionDataFilterDTO(institution_id))
+    def getConsumptionDataForInstitution(self, institution_id: int, size = -1) -> List[Dict]:
+        return self.repo.getConsumptionDataFiltered(ConsumptionDataFilterDTO(institution_id), size)
+
+    def getTotalConsumptionDataForInstitution(self, institution_id: int) -> Dict:
+        return self.repo.getTotalConsumptionDataFiltered(ConsumptionDataFilterDTO(institution_id))
 
     def saveConsumptionDataJSON(self, institution_id, json_path: str):
         data = EmissionsDataLoader.process_json_path(json_path)
