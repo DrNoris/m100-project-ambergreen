@@ -1,14 +1,22 @@
 import datetime
 import os
 
+from kivy.clock import Clock
 from kivy.properties import BooleanProperty, NumericProperty
+from kivy.uix.button import Button
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.image import Image
+from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.scrollview import ScrollView
+from kivy.uix.spinner import Spinner
 from kivy_garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
 import matplotlib.pyplot as plt
 import numpy as np
 
 from ambergreen.AiManagement.footprintPredictionManagement.emmisionsPredictor import EmissionsPredictor
+from ambergreen.AiManagement.footprintPredictionManagement.emmisionsPredictorService import EmmisionsPredictorService
 from ambergreen.AiManagement.recomandationsManagement.recomandationService import RecomandationService
 from ambergreen.consumptionDataManagement.entity.consumptionData import ConsumptionData
 from ambergreen.consumptionDataManagement.service.consumptionDataService import ConsumptionDataService
@@ -72,8 +80,8 @@ class CostumePopUpAccountMenu(Popup):
             self.consumptionDataService.addConsumptionData(ConsumptionData(self.institution["id"],
                 datetime.datetime.now().month, datetime.datetime.now().year, float(energy_value), float(gas_value), float(water_value)))
         except Exception as e:
-            print(e)
-            #TODO error popup
+            self.show_error_popup(e)
+
 
     def on_view_data_press(self):
         data = self.consumptionDataService.getConsumptionDataForInstitution(self.institution["id"], size=6)
@@ -81,46 +89,174 @@ class CostumePopUpAccountMenu(Popup):
         popup.open()
 
     def on_prediction_press(self):
-        print("Prediction button pressed")
-        # Add functionality for the Prediction button here
+        loading_popup = LoadingPopup()
+        loading_popup.open()
+
+        def fetch_prediction():
+            try:
+                providerRepo = ProviderDBRepository("localhost", "m100", "postgres", "noris2580")
+                providersService = ProviderService(providerRepo)
+
+                institutionRepo = InstitutionDBRepository("localhost", "m100", "postgres", "noris2580")
+                institutionValidator = InstitutionValidator()
+                institutionsService = InstitutionService(institutionRepo, institutionValidator)
+
+                emissionsPredictorService = EmmisionsPredictorService(providersService, self.consumptionDataService,
+                                                                      institutionsService)
+
+                predictions = emissionsPredictorService.getPredictions(self.institution["id"])
+                Clock.schedule_once(lambda dt: self.show_predictions_popup(predictions), 0)
+            except Exception as e:
+                error_message = str(e)
+                Clock.schedule_once(lambda dt: self.show_error_popup(error_message), 0)
+            finally:
+                Clock.schedule_once(lambda dt: loading_popup.dismiss(), 0)
+
+        import threading
+        threading.Thread(target=fetch_prediction).start()
+
+    def show_predictions_popup(self, predictions):
+        # Create the layout for the table
+        content = BoxLayout(orientation="vertical", padding=10, spacing=10)
+        table = GridLayout(cols=4, size_hint_y=None)
+        table.bind(minimum_height=table.setter("height"))
+
+        # Add headers
+        headers = ["Date", "Predicted CO2", "Equipment Trend", "Temperature Trend"]
+        for header in headers:
+            header_label = Label(
+                text=header, bold=True, size_hint_y=None, height=30, halign="center", valign="middle"
+            )
+            header_label.bind(size=header_label.setter("text_size"))
+            table.add_widget(header_label)
+
+        # Iterate over the rows of the DataFrame using itertuples
+        for row in predictions.itertuples(index=False, name=None):
+            # Each 'row' is a tuple of values (Date, Predicted CO2, Equipment Trend, Temperature Trend)
+            for cell in row:
+                cell_label = Label(
+                    text=str(cell),
+                    size_hint_y=None,
+                    height=30,
+                    halign="center",
+                    valign="middle",
+                )
+                cell_label.bind(size=cell_label.setter("text_size"))
+                table.add_widget(cell_label)
+
+        # Add the table to a scrollable view
+        scroll_view = ScrollView(size_hint=(1, 0.9))
+        scroll_view.add_widget(table)
+        content.add_widget(scroll_view)
+
+        # Add a close button
+        close_button = Button(text="Close", size_hint=(1, 0.1))
+        close_button.bind(on_press=lambda instance: pred_popup.dismiss())
+        content.add_widget(close_button)
+
+        # Create and open the table popup
+        pred_popup = Popup(
+            title="Predictions",
+            content=content,
+            size_hint=(0.9, 0.9),
+        )
+        pred_popup.open()
 
     def on_tips_press(self):
-        # start instantiere
-        providerRepo = ProviderDBRepository("localhost", "m100", "postgres", "noris2580")
-        providersService = ProviderService(providerRepo)
+        # Show loading popup
+        loading_popup = LoadingPopup()
+        loading_popup.open()
 
-        institutionRepo = InstitutionDBRepository("localhost", "m100", "postgres", "noris2580")
-        institutionValidator = InstitutionValidator()
-        institutionsService = InstitutionService(institutionRepo, institutionValidator)
-        # stop instantiere
+        def fetch_recommendations():
+            try:
+                # Instantiate services
+                providerRepo = ProviderDBRepository("localhost", "m100", "postgres", "noris2580")
+                providersService = ProviderService(providerRepo)
 
-        # start get predictii
-        primarie = institutionsService.getInstitution(1)
+                institutionRepo = InstitutionDBRepository("localhost", "m100", "postgres", "noris2580")
+                institutionValidator = InstitutionValidator()
+                institutionsService = InstitutionService(institutionRepo, institutionValidator)
 
-        primarie_electricity_factor = providersService.getProvider(primarie.getEnergyProvider()).getEmissionFactor()
-        primarie_gas_factor = providersService.getProvider(primarie.getGasProvider()).getEmissionFactor()
-        primarie_water_factor = providersService.getProvider(primarie.getWaterProvider()).getEmissionFactor()
+                # Fetch recommendations
+                recomandationService = RecomandationService(providersService, self.consumptionDataService,
+                                                            institutionsService)
+                rec = recomandationService.getRecomandationsForInstitution(self.institution["id"])
 
-        primarie_data_loader = EmissionsDataLoader(emission_factors={
-            'electricity': primarie_electricity_factor,
-            'gas': primarie_gas_factor,
-            'water': primarie_water_factor
-        })
+                # Show recommendations in a popup
+                Clock.schedule_once(lambda dt: self.show_recommendations_popup(rec), 0)
+            except Exception as e:
+                error_message = str(e)
+                # Schedule error popup on the main thread
+                Clock.schedule_once(lambda dt: self.show_error_popup(error_message), 0)
+            finally:
+                # Schedule closing the loading popup on the main thread
+                Clock.schedule_once(lambda dt: loading_popup.dismiss(), 0)
 
-        primarie_predictor = EmissionsPredictor()
-        primarie_data_loader.load_from_json("ambergreen/GUI/cluj_napoca_town_hall_generated_consumption_data.json")
-        primarie_predictor.train(primarie_data_loader.get_emissions_data())
-        predictions = primarie_predictor.predict(months_ahead=24)
-        print(predictions)
-        # stop get predictii
+        # Run fetching in a separate thread to avoid blocking UI
+        import threading
+        threading.Thread(target=fetch_recommendations).start()
 
-        # start recomandari
-        recomandari = RecomandationService(providersService, self.consumptionDataService, institutionsService)
-        rec = recomandari.getRecomandations(primarie_data_loader.get_emissions_data())
+    def show_recommendations_popup(self, recommendations):
+        content = BoxLayout(orientation='vertical', padding=10, spacing=10)
 
-        print(rec)
-        # stop recomandari
+        label = Label(
+            text=recommendations,
+            halign='left',
+            valign='top',
+            size_hint_x=None,  # Let the width be set explicitly
+            size_hint_y=None  # Allow the height to adjust automatically
+        )
+        label.bind(
+            width=lambda instance, value: instance.setter('text_size')(instance, (value, None))
+        )
 
+        # Add the label to a scroll view
+        scroll_view = ScrollView(size_hint=(1, 0.9), bar_width=10)
+        scroll_view.add_widget(label)
+
+        # Dynamically adjust the label's width to match the ScrollView
+        def adjust_label_width(*args):
+            label.width = scroll_view.width - 20  # Adjust for padding/margins
+
+        scroll_view.bind(width=adjust_label_width)
+        label.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
+
+        # Add the scroll view and a close button to the content
+        content.add_widget(scroll_view)
+        close_button = Button(text="Close", size_hint=(1, 0.1))
+        close_button.bind(on_press=lambda instance: rec_popup.dismiss())
+        content.add_widget(close_button)
+
+        # Display the popup
+        rec_popup = Popup(
+            title="Energy, Gas, and Water Recommendations",
+            content=content,
+            size_hint=(0.8, 0.8),
+        )
+        rec_popup.open()
+
+    def show_error_popup(self, error_message):
+        # Create and show a popup for errors
+        error_popup = Popup(
+            title="Error",
+            content=Label(text=error_message),
+            size_hint=(0.6, 0.4),
+        )
+        error_popup.open()
+
+
+class LoadingPopup(Popup):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.title = "Loading..."
+        layout = BoxLayout(orientation="vertical", padding=10, spacing=10)
+
+        # Animated GIF as a spinner
+        spinner = Image(source="ambergreen/Media/loading-waiting.gif", anim_delay=0.05, size_hint=(1, 1))
+        layout.add_widget(spinner)
+
+        self.content = layout
+        self.size_hint = (0.4, 0.4)
 
 class CalculatorPopup(Popup):
     show_results = BooleanProperty(False)
