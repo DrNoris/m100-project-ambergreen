@@ -35,5 +35,16 @@ class InstitutionService:
         except Exception as e:
             print(e)
 
+
+    def getInstitutionByName(self, institution_name: str) -> Institution | None:
+        try:
+            institutions = self.getInstitutions()
+            for institution in institutions:
+                if institution.getName() == institution_name:
+                    return institution
+            return None
+        except Exception as e:
+            print(e)
+
     def getInstitutions(self) -> List[Institution]:
         return self.repo.getAll()

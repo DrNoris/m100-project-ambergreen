@@ -36,7 +36,7 @@ class EmmisionsPredictorService:
             'gas': gas_factor,
             'water': water_factor
         })
-        if data is None:
+        if data is None or len(data) == 0:
             if json_path is None:
                 raise RuntimeError('Json path not specified')
 
