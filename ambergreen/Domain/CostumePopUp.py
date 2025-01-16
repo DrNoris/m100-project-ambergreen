@@ -1,4 +1,5 @@
 import datetime
+import json
 import os
 
 from kivy.clock import Clock
@@ -78,7 +79,7 @@ class CostumePopUpAccountMenu(Popup):
     def handle_insert_result(self, energy_value, water_value, gas_value):
         try:
             self.consumptionDataService.addConsumptionData(ConsumptionData(self.institution["id"],
-                datetime.datetime.now().month, datetime.datetime.now().year, float(energy_value), float(gas_value), float(water_value)))
+                datetime.datetime.now().month, datetime.datetime.now().year, float(energy_value), float(water_value), float(gas_value)))
         except Exception as e:
             self.show_error_popup(e)
 
@@ -104,7 +105,8 @@ class CostumePopUpAccountMenu(Popup):
                 emissionsPredictorService = EmmisionsPredictorService(providersService, self.consumptionDataService,
                                                                       institutionsService)
 
-                predictions = emissionsPredictorService.getPredictions(self.institution["id"])
+
+                predictions = emissionsPredictorService.getPredictions(self.institution["id"], json_path='ambergreen/GUI/cluj_napoca_town_hall_generated_consumption_data.json')
                 Clock.schedule_once(lambda dt: self.show_predictions_popup(predictions), 0)
             except Exception as e:
                 error_message = str(e)
@@ -116,50 +118,40 @@ class CostumePopUpAccountMenu(Popup):
         threading.Thread(target=fetch_prediction).start()
 
     def show_predictions_popup(self, predictions):
-        # Create the layout for the table
+        dates = predictions["date"].tolist()
+        predicted_co2 = predictions["predicted_co2"].tolist()
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.plot(dates, predicted_co2, marker='o', linestyle='-', color='blue', label='Predicted CO2')
+        ax.set_title("Predicted CO2 Emissions Over Time", fontsize=16)
+        ax.set_xlabel("Date", fontsize=12)
+        ax.set_ylabel("Predicted CO2", fontsize=12)
+        ax.grid(True, linestyle='--', alpha=0.6)
+        ax.legend()
+
+        # Rotate date labels for better visibility
+        plt.xticks(rotation=45, ha='right')
+
+        # Add the matplotlib figure to the Kivy layout
         content = BoxLayout(orientation="vertical", padding=10, spacing=10)
-        table = GridLayout(cols=4, size_hint_y=None)
-        table.bind(minimum_height=table.setter("height"))
-
-        # Add headers
-        headers = ["Date", "Predicted CO2", "Equipment Trend", "Temperature Trend"]
-        for header in headers:
-            header_label = Label(
-                text=header, bold=True, size_hint_y=None, height=30, halign="center", valign="middle"
-            )
-            header_label.bind(size=header_label.setter("text_size"))
-            table.add_widget(header_label)
-
-        # Iterate over the rows of the DataFrame using itertuples
-        for row in predictions.itertuples(index=False, name=None):
-            # Each 'row' is a tuple of values (Date, Predicted CO2, Equipment Trend, Temperature Trend)
-            for cell in row:
-                cell_label = Label(
-                    text=str(cell),
-                    size_hint_y=None,
-                    height=30,
-                    halign="center",
-                    valign="middle",
-                )
-                cell_label.bind(size=cell_label.setter("text_size"))
-                table.add_widget(cell_label)
-
-        # Add the table to a scrollable view
-        scroll_view = ScrollView(size_hint=(1, 0.9))
-        scroll_view.add_widget(table)
-        content.add_widget(scroll_view)
+        graph_widget = FigureCanvasKivyAgg(fig)
+        content.add_widget(graph_widget)
 
         # Add a close button
         close_button = Button(text="Close", size_hint=(1, 0.1))
         close_button.bind(on_press=lambda instance: pred_popup.dismiss())
         content.add_widget(close_button)
 
-        # Create and open the table popup
+        # Create and open the popup
         pred_popup = Popup(
-            title="Predictions",
+            title="Predictions Graph",
             content=content,
             size_hint=(0.9, 0.9),
+            title_align="center",  # Centered title
+            separator_color=(0.1, 0.2, 0.3, 0.5),  # Subtle separator line
+            background_color=(0.1, 0.2, 0.3, 0.5),  # Semi-transparent dark background
         )
+
         pred_popup.open()
 
     def on_tips_press(self):
@@ -271,8 +263,8 @@ class CalculatorPopup(Popup):
         footprint_calculator = FootprintCalculator()
 
         data = {'energy_kwh': float(energy_value),
-                'gas_m3': float(water_value),
-                'water_m3': float(gas_value)}
+                'gas_m3': float(gas_value),
+                'water_m3': float(water_value)}
 
         data['co2_footprint'] = footprint_calculator.calculate(data)
         data['trees_footprint'] = round(data['co2_footprint'] / 0.89, 2)
