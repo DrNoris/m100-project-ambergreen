@@ -24,12 +24,12 @@ AmberGreen is an AI-powered application designed to calculate, monitor, and pred
 - **PostgreSQL** is used for storing user data and utility consumption records.
 
 ### 💻 Frontend & Backend
-- **Frontend**: Built using **Kivy** for an intuitive and modern user interface.
-- **Backend**: Powered by **Python** for efficient and robust processing.
+- **Frontend**: Built using **Kivy**.
+- **Backend**: Powered by **Python**.
 
 ## Current Status
 
-AmberGreen is currently in **demo mode** and requires running directly from an Integrated Development Environment (IDE). A packaged release is planned for future iterations.
+AmberGreen is currently in **demo mode** and requires running directly from an Integrated Development Environment (IDE).
 
 ## Technology Stack
 
@@ -58,14 +58,12 @@ Ensure you have the following installed:
 2. **Set up a virtual environment**:
    ```bash
    python -m venv env
-   source env/bin/activate  # On Windows: .\\env\\Scripts\\activate
-   pip install -r requirements.txt
+   source env/bin/activate 
    ```
 
 3. **Set up the database**:
    - Create a PostgreSQL database.
-   - Update the database configuration in `database.ini` (or a similar file).
-   - Apply migrations (if necessary) to set up the schema.
+   - Update the database configuration code.
 
 4. **Run the application**:
    ```bash
