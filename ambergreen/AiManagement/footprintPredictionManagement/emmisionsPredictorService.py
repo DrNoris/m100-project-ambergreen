@@ -13,13 +13,13 @@ class EmmisionsPredictorService:
         self.__institution_service = institution_service
         self.__dict: dict[int, EmissionsPredictor] = {}
 
-    def getPredictions(self, institution_id: int, months_ahead: int = 24, json_path=None):
+    def getPredictions(self, institution_id: int, months_ahead: int = 24, json_path='cluj_napoca_town_hall_generated_consumption_data_copy.json'):
         if institution_id in self.__dict:
             return self.__dict[institution_id].predict(months_ahead=months_ahead)
         else:
             return self.trainPredictor(institution_id, months_ahead, json_path)
 
-    def trainPredictor(self, institution_id: int, months_ahead: int = 24, json_path=None):
+    def trainPredictor(self, institution_id: int, months_ahead: int = 24, json_path='cluj_napoca_town_hall_generated_consumption_data_copy.json'):
         emission_predictor = EmissionsPredictor()
         institution = self.__institution_service.getInstitution(institution_id)
         if institution is None:
@@ -36,7 +36,7 @@ class EmmisionsPredictorService:
             'gas': gas_factor,
             'water': water_factor
         })
-        if data is None or len(data) == 0:
+        if data is None or len(data) < 15:
             if json_path is None:
                 raise RuntimeError('Json path not specified')
 

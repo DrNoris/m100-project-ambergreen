@@ -60,7 +60,3 @@ class RecomandationService:
                      "temperature": 0}
         )
         return response['message']['content']
-
-
-
-
